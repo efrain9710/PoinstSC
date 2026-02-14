@@ -39,7 +39,7 @@ passport.deserializeUser((obj, done) => done(null, obj));
 passport.use(new Strategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: process.env.CALLBACK_URL || `https://poinst-sc-uiv3.vercel.app/auth/discord/callback`,
+    callbackURL: process.env.CALLBACK_URL || `https://poinstsc.onrender.com/auth/discord/callback`,
     scope: ['identify', 'guilds']
 }, (accessToken, refreshToken, profile, done) => {
     process.nextTick(() => done(null, profile));
