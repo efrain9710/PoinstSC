@@ -11,7 +11,7 @@ const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent, // <--- ESTO REQUIERE ACTIVAR EL INTENT EN EL PORTAL
+        GatewayIntentBits.MessageContent, // RECUERDA ACTIVAR ESTO EN EL PORTAL DE DISCORD
         GatewayIntentBits.GuildMessageReactions
     ],
     partials: [Partials.Message, Partials.Channel, Partials.Reaction]
@@ -39,13 +39,13 @@ passport.deserializeUser((obj, done) => done(null, obj));
 passport.use(new Strategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: process.env.CALLBACK_URL || `https://poinstsc.onrender.com/auth/discord/callback`,
+    callbackURL: process.env.CALLBACK_URL || `http://localhost:${PORT}/auth/discord/callback`,
     scope: ['identify', 'guilds']
 }, (accessToken, refreshToken, profile, done) => {
     process.nextTick(() => done(null, profile));
 }));
 
-app.use(session({ secret: 'star_citizen_rocks', resave: false, saveUninitialized: false }));
+app.use(session({ secret: 'star_citizen_security_protocol', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -64,7 +64,7 @@ function checkAuth(req, res, next) {
 }
 
 // =========================================================
-// 🎨 ESTILOS STAR CITIZEN (VISUAL MEJORADO)
+// 🎨 ESTILOS STAR CITIZEN (VISUAL)
 // =========================================================
 const cssStarCitizen = `
 <style>
@@ -75,7 +75,7 @@ const cssStarCitizen = `
         --sc-dark-blue: #0b1a26;
         --sc-gold: #ffb400;
         --sc-alert: #ff3333;
-        --glass-panel: rgba(11, 26, 38, 0.85);
+        --glass-panel: rgba(11, 26, 38, 0.9);
     }
 
     body {
@@ -84,9 +84,8 @@ const cssStarCitizen = `
         color: white;
         font-family: 'Rajdhani', sans-serif;
         background-image: 
-            radial-gradient(circle at 20% 20%, rgba(0, 220, 255, 0.1) 0%, transparent 40%),
-            radial-gradient(circle at 80% 80%, rgba(255, 180, 0, 0.05) 0%, transparent 40%),
-            linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+            radial-gradient(circle at 50% 50%, rgba(0, 220, 255, 0.05) 0%, transparent 60%),
+            linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
             url('https://robertsspaceindustries.com/media/jk100j5b8q8qor/source/SC_Alpha_3-18_Dashboard_Visual.jpg'); 
         background-size: cover;
         background-attachment: fixed;
@@ -100,20 +99,10 @@ const cssStarCitizen = `
         font-size: 4rem; margin: 0;
         color: var(--sc-blue);
         text-shadow: 0 0 20px var(--sc-blue);
-        animation: glitch 3s infinite;
-    }
-
-    @keyframes glitch {
-        0% { text-shadow: 0 0 20px var(--sc-blue); }
-        95% { text-shadow: 0 0 20px var(--sc-blue); transform: skew(0deg); }
-        96% { text-shadow: -2px 0 var(--sc-alert); transform: skew(2deg); }
-        97% { text-shadow: 2px 0 var(--sc-gold); transform: skew(-2deg); }
-        100% { text-shadow: 0 0 20px var(--sc-blue); transform: skew(0deg); }
     }
 
     .rewards-text {
         font-size: 1.5rem; color: var(--sc-gold); font-weight: bold; margin-top: 10px;
-        text-shadow: 0 0 10px rgba(255, 180, 0, 0.5);
         border: 1px solid var(--sc-gold); padding: 10px 30px; border-radius: 4px;
         background: rgba(255, 180, 0, 0.1); display: inline-block;
     }
@@ -130,6 +119,16 @@ const cssStarCitizen = `
     }
     .btn-quantum:hover {
         background: white; box-shadow: 0 0 50px white; transform: scale(1.05); cursor: pointer;
+    }
+
+    .btn-officer {
+        color: #556677; font-size: 0.9rem; text-decoration:none; margin-top:30px;
+        border: 1px solid #334455; padding: 10px 20px; border-radius: 4px; 
+        transition: 0.3s; font-family: 'Orbitron', sans-serif; letter-spacing: 2px;
+        background: rgba(0,0,0,0.5); display: inline-block;
+    }
+    .btn-officer:hover {
+        border-color: var(--sc-alert); color: var(--sc-alert); box-shadow: 0 0 15px rgba(255, 51, 51, 0.3);
     }
 
     .features-grid {
@@ -177,20 +176,24 @@ app.get('/', (req, res) => {
     console.log(`🌐 [WEB] Visita a la página de inicio`); 
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}&permissions=8&scope=bot`;
     res.send(`
-    <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>System PointsSC</title>${cssStarCitizen}</head>
+    <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Star Citizen Clips</title>${cssStarCitizen}</head>
     <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 60px 20px;">
-        <div class="creators">SYSTEMS ONLINE // BY KING & JOYFER</div>
-        <h1 class="hero-title">PoinstSC</h1>
+        <h3>DESARROLLADO POR KINGS & JOYFER</h3>
+        <h1 class="hero-title">CITIZEN CLIPS</h1>
         <div class="rewards-text">🏆 SÉ EL TOP 1 Y GANA NAVES + REGALOS SORPRESA 🎁</div>
         <p style="color:#8899aa; max-width:600px; text-align:center; margin-top:20px; font-size:1.1rem;">
             Demuestra tus habilidades en el Verso. Sube tus mejores momentos. La comunidad vota.
         </p>
         <a href="${inviteLink}" class="btn-quantum">INICIAR SISTEMAS (INVITAR)</a>
-        <a href="/admin" style="color: #445566; font-size: 0.8rem; text-decoration:none; margin-top:30px;">>> OFICIALES EN CUBIERTA <<</a>
+        
+        <a href="/admin" class="btn-officer">
+            🔒 ACCESO DE MANDO: SOLO OFICIALES
+        </a>
+
         <div class="features-grid">
-            <div class="feature-card"><h3>🚀 SUBE TUS CLIPS</h3><p>Usa <code>$subir</code> o adjunta tu video.</p></div>
-            <div class="feature-card"><h3>🥇 RANKING SEMANAL</h3><p>Los votos deciden quién merece las naves.</p></div>
-            <div class="feature-card"><h3>🔒 PROTOCOLO SEGURO</h3><p>Gestión transparente y segura.</p></div>
+            <div class="feature-card"><h3>🚀 SUBE TUS CLIPS</h3><p>Usa <code>$subir</code> en el canal designado. Tienes 2 intentos para impresionar.</p></div>
+            <div class="feature-card"><h3>🥇 RANKING SEMANAL</h3><p>Los votos de la comunidad deciden quién merece las naves.</p></div>
+            <div class="feature-card"><h3>📡 CANAL DEDICADO</h3><p>Usa <code>$setcanal</code> para configurar dónde escucha el bot.</p></div>
         </div>
     </body></html>`);
 });
@@ -242,7 +245,7 @@ app.get('/admin', checkAuth, async (req, res) => {
             <table><thead><tr><th>PILOT</th><th>STATUS</th><th>LINK</th></tr></thead><tbody>
             ${videosProcesados.length ? videosProcesados.map(v => `<tr>
                 <td style="color:#8899aa;">${v.nombreDisplay}</td>
-                <td style="font-weight:bold; color:${v.estado === 'aprobado' ? '#00dcff' : '#ffb400'}">${v.estado.toUpperCase()}</td>
+                <td style="font-weight:bold; color:${v.estado === 'aprobado' ? '#00dcff' : (v.estado === 'rechazado' ? '#ff3333' : '#ffb400')}">${v.estado.toUpperCase()}</td>
                 <td><a href="${v.url}" target="_blank" style="color:white;">VIEW ↗</a></td>
             </tr>`).join('') : '<tr><td colspan="3">NO SIGNALS</td></tr>'}
             </tbody></table>
@@ -252,36 +255,56 @@ app.get('/admin', checkAuth, async (req, res) => {
 });
 
 // =========================================================
-// 🤖 BOT LOGIC (SOLUCIÓN DE COMANDOS)
+// 🤖 BOT LOGIC
 // =========================================================
 
-client.once('clientReady', (c) => {
+client.once('clientReady', async (c) => {
     console.log(`✅ [BOT] Sistemas ONLINE. Piloto: ${c.user.tag}`);
+    console.log(`💻 [SYS] Desarrollado por: KINGS & JOYFER`);
+    
+    // Crear tabla de configuración de canales si no existe
+    await pool.execute(`
+        CREATE TABLE IF NOT EXISTS config_canales (
+            guild_id VARCHAR(255) PRIMARY KEY,
+            channel_id VARCHAR(255)
+        )
+    `);
+    
     app.listen(PORT, () => console.log(`🌍 [WEB] Dashboard activo en puerto ${PORT}`));
 });
 
 client.on('messageCreate', async message => {
     if (message.author.bot || !message.guild) return;
-    
-    // --- DEBUGGING: ESTO TE DIRÁ SI EL BOT ESCUCHA O NO ---
-    console.log(`📩 [MSG] ${message.author.username} dijo: ${message.content}`);
-
-    // VERIFICAR CANAL (Si está en .env)
-    if (process.env.CHANNEL_ID && message.channel.id !== process.env.CHANNEL_ID) {
-        // Ignoramos silenciosamente si no es el canal correcto
-        return; 
-    }
 
     const guild_id = message.guild.id;
-    const semana = getSemanaActual();
-    const esVideo = message.attachments.size > 0 && message.attachments.first().contentType?.startsWith('video/');
     const args = message.content.trim().split(/ +/);
     const command = args.shift().toLowerCase();
 
-    // 1. AYUDA / COMANDOS (Agregué singular $comando)
+    // 0. CONFIGURACIÓN DEL CANAL (SOLO ADMINS)
+    if (command === '$setcanal') {
+        if (!message.member.permissions.has('Administrator')) return message.reply("⛔ **ACCESO DENEGADO:** Solo oficiales (Admins) pueden configurar el canal.");
+        
+        await pool.execute(`INSERT INTO config_canales (guild_id, channel_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE channel_id = VALUES(channel_id)`, [guild_id, message.channel.id]);
+        return message.channel.send(`✅ **CANAL CONFIGURADO.** A partir de ahora, solo procesaré clips y comandos en este canal: <#${message.channel.id}>.`);
+    }
+
+    // --- CHECK DE CANAL ---
+    const [rowsConfig] = await pool.execute("SELECT channel_id FROM config_canales WHERE guild_id = ?", [guild_id]);
+    
+    if (rowsConfig.length > 0) {
+        if (rowsConfig[0].channel_id !== message.channel.id) {
+            return; // Ignorar otros canales
+        }
+    }
+
+    // --- LÓGICA NORMAL ---
+    const semana = getSemanaActual();
+    const esVideo = message.attachments.size > 0 && message.attachments.first().contentType?.startsWith('video/');
+
+    // 1. AYUDA
     if (command === '$comandos' || command === '$comando' || command === '$help') {
-        let txt = "**🚀 PROTOCOLO DE COMANDOS**\n\n👤 **Pilotos:**\n`$subir` : Sube tu clip (adjunta video/link).\n`$puntos` : Ver tu reputación actual.\n";
-        if (message.member.permissions.has('Administrator')) txt += "\n👮‍♂️ **Admins:**\n`$videos` : Iniciar votación.\n`$finalizarvotacion` : Cerrar semana.";
+        let txt = "**🚀 PROTOCOLO DE COMANDOS**\n\n👤 **Pilotos:**\n`$subir` : Sube tu clip.\n`$puntos` : Ver tu reputación.\n";
+        if (message.member.permissions.has('Administrator')) txt += "\n👮‍♂️ **Admins:**\n`$videos` : Iniciar votación.\n`$finalizarvotacion` : Cerrar semana.\n`$setcanal` : Fijar este chat como canal del bot.";
         return message.channel.send(txt);
     }
 
@@ -298,7 +321,7 @@ client.on('messageCreate', async message => {
 
         const [hist] = await pool.execute("SELECT * FROM videos WHERE user_id = ? AND semana_id = ? AND guild_id = ?", [message.author.id, semana, guild_id]);
         if (hist.some(v => v.estado !== 'rechazado')) return message.reply("⛔ **ALERTA:** Ya tienes una transmisión activa.");
-        if (hist.length >= 2) return message.reply("⛔ **ALERTA:** Sin combustible (Intentos agotados).");
+        if (hist.length >= 2) return message.reply("⛔ **ALERTA:** Intentos agotados.");
 
         const msg = await message.reply(`📹 **TRANSMISIÓN RECIBIDA** (Intento ${hist.length + 1}/2). Procesando...`);
         await pool.execute("INSERT INTO videos (user_id, guild_id, url, semana_id, estado, upload_message_id) VALUES (?, ?, ?, ?, 'pendiente', ?)", [message.author.id, guild_id, url, semana, msg.id]);
@@ -312,12 +335,7 @@ client.on('messageCreate', async message => {
         return message.reply(`💳 Créditos: **${u.length ? u[0].puntos : 0}** Puntos.`);
     }
 
-    // 4. VOTAR (Explicación para el usuario)
-    if (command === '$votar') {
-        return message.reply("🗳️ Para votar, espera a que un Admin use `$videos` y reacciona a los clips.");
-    }
-
-    // 5. VIDEOS (ADMIN)
+    // 4. VIDEOS
     if (command === '$videos') {
         if (!message.member.permissions.has('Administrator')) return;
         const [vids] = await pool.execute("SELECT * FROM videos WHERE semana_id = ? AND guild_id = ? AND estado = 'aprobado'", [semana, guild_id]);
@@ -331,7 +349,7 @@ client.on('messageCreate', async message => {
         }
     }
 
-    // 6. FINALIZAR (ADMIN)
+    // 5. FINALIZAR
     if (command === '$finalizarvotacion') {
         if (!message.member.permissions.has('Administrator')) return;
         const [win] = await pool.execute(`SELECT video_id, COUNT(*) as t FROM votos WHERE semana_id = ? AND guild_id = ? GROUP BY video_id ORDER BY t DESC LIMIT 1`, [semana, guild_id]);
@@ -374,7 +392,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
         
         await pool.execute("INSERT INTO votos (voter_id, video_id, semana_id, guild_id) VALUES (?, ?, ?, ?)", [user.id, vot[0].id, semana, guild_id]);
         await pool.execute("INSERT INTO usuarios (user_id, guild_id, username, puntos) VALUES (?, ?, ?, 0) ON DUPLICATE KEY UPDATE username = VALUES(username)", [user.id, guild_id, user.username]);
-        console.log(`🗳️ [VOTO] Piloto ${user.username} ha votado.`);
     }
 });
 
