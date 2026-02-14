@@ -1,0 +1,22 @@
+{
+  "name": "PoinstSC",
+  "version": "1.0.0",
+  "description": "Bot de Discord con sistema de puntos",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.25.1",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "express-session": "^1.19.0",
+    "mysql2": "^3.17.1",
+    "passport": "^0.7.0",
+    "passport-discord": "^0.1.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
