@@ -177,10 +177,10 @@ app.get('/', (req, res) => {
     console.log(`🌐 [WEB] Visita a la página de inicio`); 
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}&permissions=8&scope=bot`;
     res.send(`
-    <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Star Citizen Clips</title>${cssStarCitizen}</head>
+    <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Star Citizen PoinstSC</title>${cssStarCitizen}</head>
     <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 60px 20px;">
         <div class="creators">SYSTEMS ONLINE // BY KING & JOYFER</div>
-        <h1 class="hero-title">CITIZEN CLIPS</h1>
+        <h1 class="hero-title">PoinstSC</h1>
         <div class="rewards-text">🏆 SÉ EL TOP 1 Y GANA NAVES + REGALOS SORPRESA 🎁</div>
         <p style="color:#8899aa; max-width:600px; text-align:center; margin-top:20px; font-size:1.1rem;">
             Demuestra tus habilidades en el Verso. Sube tus mejores momentos. La comunidad vota.
