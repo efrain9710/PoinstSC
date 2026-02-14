@@ -177,7 +177,7 @@ app.get('/', (req, res) => {
     console.log(`🌐 [WEB] Visita a la página de inicio`); 
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}&permissions=8&scope=bot`;
     res.send(`
-    <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Star Citizen PoinstSC</title>${cssStarCitizen}</head>
+    <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>System PointsSC</title>${cssStarCitizen}</head>
     <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 60px 20px;">
         <div class="creators">SYSTEMS ONLINE // BY KING & JOYFER</div>
         <h1 class="hero-title">PoinstSC</h1>
@@ -186,7 +186,7 @@ app.get('/', (req, res) => {
             Demuestra tus habilidades en el Verso. Sube tus mejores momentos. La comunidad vota.
         </p>
         <a href="${inviteLink}" class="btn-quantum">INICIAR SISTEMAS (INVITAR)</a>
-        <a href="/admin" style="color: #445566; font-size: 0.8rem; text-decoration:none; margin-top:30px;">>> ADMIN CONSOLE <<</a>
+        <a href="/admin" style="color: #445566; font-size: 0.8rem; text-decoration:none; margin-top:30px;">>> OFICIALES EN CUBIERTA <<</a>
         <div class="features-grid">
             <div class="feature-card"><h3>🚀 SUBE TUS CLIPS</h3><p>Usa <code>$subir</code> o adjunta tu video.</p></div>
             <div class="feature-card"><h3>🥇 RANKING SEMANAL</h3><p>Los votos deciden quién merece las naves.</p></div>
