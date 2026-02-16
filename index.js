@@ -179,8 +179,8 @@ app.get('/', (req, res) => {
     <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Star Citizen Clips</title>${cssStarCitizen}</head>
     <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 60px 20px;">
         <div class="creators">SYSTEMS ONLINE // BY KINGS & JOYFER</div>
-        <h1 class="hero-title">CITIZEN CLIPS</h1>
-        <div class="rewards-text">🏆 SÉ EL TOP 1 Y GANA NAVES + REGALOS SORPRESA 🎁</div>
+        <h1 class="hero-title">The Orchestrator</h1>
+        <div class="rewards-text">🏆 SÉ EL TOP 1 Y GANA GRANDES PREMIOS 🎁</div>
         <p style="color:#8899aa; max-width:600px; text-align:center; margin-top:20px; font-size:1.1rem;">
             Demuestra tus habilidades en el Verso. Sube tus mejores momentos. La comunidad vota.
         </p>
@@ -283,7 +283,7 @@ client.on('messageCreate', async message => {
     if (command === '$setcanal') {
         if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator)) return message.reply("⛔ **ACCESO DENEGADO:** Solo oficiales (Admins) pueden usar esto.");
         await pool.execute(`INSERT INTO config_canales (guild_id, channel_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE channel_id = VALUES(channel_id)`, [guild_id, message.channel.id]);
-        return message.channel.send(`✅ **CANAL CONFIGURADO.**`);
+        return message.channel.send(`✅ **CANAL CONFIGURADO CON EXITO!**`);
     }
 
     // --- CHECK DE CANAL ---
@@ -297,15 +297,15 @@ client.on('messageCreate', async message => {
 
     // 1. AYUDA
     if (command === '$comandos' || command === '$comando' || command === '$help') {
-        let txt = "**🚀 PROTOCOLO DE COMANDOS**\n\n👤 **Pilotos:**\n`$subir` : Sube tu clip.\n`$puntos` : Ver tu reputación.\n";
-        if (message.member.permissions.has(PermissionsBitField.Flags.Administrator)) txt += "\n👮‍♂️ **Admins:**\n`$list` : Ver Ranking actual.\n`$videos` : Iniciar votación.\n`$finalizarvotacion` : Cerrar semana.\n`$setcanal` : Fijar canal.";
+        let txt = "**🚀 LISTA DE COMANDOS**\n\n👤 **Participantes:**\n`$clip` : Usa este comando junto con tu clip(no URL's).\n`$wallet` : Te muestra cuantos coins tienes.\n";
+        if (message.member.permissions.has(PermissionsBitField.Flags.Administrator)) txt += "\n👮‍♂️ **Admins:**\n`$rank` : Ver Ranking actual.\n`$votacion` : Iniciar votación.\n`$finalizar` : Cierra la votacion y la semana.\n`$setcanal` : Fijar canal para el bot.";
         return message.channel.send(txt);
     }
 
     // 2. SUBIR (TODOS)
-    if ((esVideo) || command === '$subir') {
+    if ((esVideo) || command === '$clip') {
         let url = esVideo ? message.attachments.first().url : args[0];
-        if (!url && command === '$subir') return message.reply("❌ Falta video.");
+        if (!url && command === '$clip') return message.reply("❌ Falta video.");
         if (!url) return;
 
         const [cierres] = await pool.execute("SELECT * FROM cierres WHERE semana_id = ? AND guild_id = ?", [semana, guild_id]);
@@ -322,13 +322,13 @@ client.on('messageCreate', async message => {
     }
 
     // 3. PUNTOS (TODOS)
-    if (command === '$puntos') {
+    if (command === '$wallet') {
         const [u] = await pool.execute("SELECT puntos FROM usuarios WHERE user_id = ? AND guild_id = ?", [message.author.id, guild_id]);
-        return message.reply(`💳 Créditos: **${u.length ? u[0].puntos : 0}** Puntos.`);
+        return message.reply(`💳 Coins: **${u.length ? u[0].puntos : 0}** .`);
     }
 
     // 4. LIST (SOLO ADMINS)
-    if (command === '$list') {
+    if (command === '$rank') {
         if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator)) return message.reply("⛔ **ACCESO DENEGADO:** Solo Admins.");
         
         // Consulta para obtener ranking de la SEMANA actual (Votos)
@@ -352,7 +352,7 @@ client.on('messageCreate', async message => {
     }
 
     // 5. VIDEOS (SOLO ADMINS)
-    if (command === '$videos') {
+    if (command === '$votacion') {
         if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator)) return message.reply("⛔ **ACCESO DENEGADO:** Solo Admins.");
         const [vids] = await pool.execute("SELECT * FROM videos WHERE semana_id = ? AND guild_id = ? AND estado = 'aprobado'", [semana, guild_id]);
         if (!vids.length) return message.reply("Sin transmisiones aprobadas.");
@@ -366,7 +366,7 @@ client.on('messageCreate', async message => {
     }
 
     // 6. FINALIZAR (SOLO ADMINS)
-    if (command === '$finalizarvotacion') {
+    if (command === '$finalizar') {
         if (!message.member.permissions.has(PermissionsBitField.Flags.Administrator)) return message.reply("⛔ **ACCESO DENEGADO:** Solo Admins.");
         const [win] = await pool.execute(`SELECT video_id, COUNT(*) as t FROM votos WHERE semana_id = ? AND guild_id = ? GROUP BY video_id ORDER BY t DESC LIMIT 1`, [semana, guild_id]);
         if (!win.length) return message.reply("Nadie votó.");
